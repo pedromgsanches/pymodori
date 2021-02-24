@@ -2,7 +2,6 @@
 # # detecta movimentos do rato
 # # detecta se bloqueia o Pc
 # # caso muito ativo durante muito tempo - o icone muda e os sons tocam
-import logging
 import sys
 import os
 from playsound import playsound
