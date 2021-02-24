@@ -1,3 +1,0 @@
-[pymodori]
-lotime = 15
-hitime = 45
