@@ -12,13 +12,20 @@ from PyQt5.QtCore import QRunnable, Qt, QThreadPool
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction, QLabel, QApplication, QMainWindow
 
+from configparser import ConfigParser
+cfg = ConfigParser()
+cfg.read('config.ini')
+print(cfg.sections())
+
+time1_seconds = cfg.getint('pymodori','lotime') * 60
+time2_seconds = cfg.getint('pymodori','hitime') * 60
+
 sound1_file   = 'data/sound1.mp3'
 sound2_file   = 'data/sound2.mp3'
 hap           = 'data/hap.png'
 sad           = 'data/sad.png'
 mad           = 'data/mad.png'
-time1_seconds = 15*60 #1800 -- para alterar na window "Settings"
-time2_seconds = 45*60 #2700 -- para alterar na window "Settings"
+
 
 class Timer(QRunnable):
     def __init__(self, time1_seconds,time2_seconds):
@@ -42,20 +49,20 @@ class Timer(QRunnable):
                 TrayDef.setIcon("sad")
                 playsound(sound1_file)
                 ct1=1
-                sleep(1)
+                sleep(5)
                 print("LoTime")
             elif init_time + timedelta(seconds=self.time2_seconds) < datetime.now():
                 TrayDef.setIcon("mad")
                 playsound(sound2_file)
                 init_time = datetime.now()
                 ct1=0
-                sleep(1)
+                sleep(5)
                 x=False
                 print("HiTime")
             else:   
                 tdelta = init_time + timedelta(seconds=self.time2_seconds) - datetime.now()
                 print("Time2Buzz: ", tdelta)
-                sleep(1)
+                sleep(5)
 
 class Tray(QRunnable):
     def __init__(self):
