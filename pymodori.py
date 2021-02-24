@@ -3,9 +3,7 @@
 # # detecta se bloqueia o Pc
 # # caso muito ativo durante muito tempo - o icone muda e os sons tocam
 import logging
-import random
 import sys
-import time
 import os
 from playsound import playsound
 from time import sleep
@@ -13,8 +11,6 @@ from datetime import datetime, timedelta
 from PyQt5.QtCore import QRunnable, Qt, QThreadPool
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction, QLabel, QApplication, QMainWindow
-
-logging.basicConfig(format="%(message)s", level=logging.INFO)
 
 sound1_file   = 'data/sound1.mp3'
 sound2_file   = 'data/sound2.mp3'
