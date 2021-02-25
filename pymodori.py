@@ -24,9 +24,6 @@ try:
     cfg.read('config.ini')
     time1_seconds = cfg.getint('pymodori','lotime') * 60
     time2_seconds = cfg.getint('pymodori','hitime') * 60
-    tf = open('control','w')
-    tf.write('00:00:00')
-    tf.close()
 except:
     #cfg('pymodori','lotime') = 20
     #cfg('pymodori','hitime') = 25
@@ -42,6 +39,7 @@ try:
     hap           = 'data/hap.png'
     sad           = 'data/sad.png'
     mad           = 'data/mad.png'
+    pym           = 'data/pym.png'
 except:
     print("Where are my data files?")
     sys.exit()
@@ -70,14 +68,14 @@ class Timer(QRunnable):
                 TrayDef.setIcon("sad")
                 playsound(sound1_file)
                 ct1=1
-                sleep(5)
+                sleep(2)
                 #print("LoTime")
             elif init_time + timedelta(seconds=self.time2_seconds) < datetime.now():
                 TrayDef.setIcon("mad")
                 playsound(sound2_file)
                 init_time = datetime.now()
                 ct1=0
-                sleep(5)
+                sleep(2)
                 x=False
                 #print("HiTime")
             else:   
@@ -85,14 +83,14 @@ class Timer(QRunnable):
                 tf = open('control','w')
                 tf.write(str(tdelta))
                 tf.close()
-                sleep(5)
+                sleep(2)
 
 class Tray(QRunnable):
     def __init__(self):
         #START QTapp
         # Adding an icon
         self.tray = QSystemTrayIcon() 
-        self.tray.setIcon(QIcon(hap)) 
+        self.tray.setIcon(QIcon(pym)) 
         self.tray.setVisible(True) 
         # Creating the menu options
         self.menu = QMenu() 
@@ -121,6 +119,8 @@ class Tray(QRunnable):
             self.tray.setIcon(QIcon(hap))
         if NewIcon=="mad":
             self.tray.setIcon(QIcon(mad))
+        if NewIcon=="pym":
+            self.tray.setIcon(QIcon(pym))            
             
 def AppExit():
     os.remove('control')
@@ -169,15 +169,20 @@ pool = QThreadPool.globalInstance()
 #app.exec_()
 
 def main():
+    tf = open('control','w')
+    tf.write('00:00:00')
+    tf.close()
     pool.start(app.exec_())
-    mainControl = 0
     pool.CancelAll()
     os.remove('control') 
-
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    cf = open('control',"a+")
-    cf.write("OK")
-    cf.close()
+    #cf = open('control',"a+")
+    #cf.write("OK")
+    #cf.close()
     main()
+
+
+
+
