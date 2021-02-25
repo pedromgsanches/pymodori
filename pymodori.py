@@ -1,8 +1,13 @@
+#NEXT:
+# criar ficheiro config automatico para o caso de nao existir
+# excepçoes sons e imagens
+# impedir duas instancias
+# show timer, botao restart, 
+
 # Muito mais tarde: 
 # # detecta movimentos do rato
 # # detecta se bloqueia o Pc
 # # caso muito ativo durante muito tempo - o icone muda e os sons tocam
-import logging
 import sys
 import os
 from playsound import playsound
