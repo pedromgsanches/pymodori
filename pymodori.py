@@ -55,6 +55,9 @@ class Timer(QRunnable):
         ct1=0
         x=True
         TrayDef.setIcon("hap")
+        tf = open('control','w')
+        tf.write('00:00:00')
+        tf.close()
         while x==True:
             try:
                 f = open('control')
