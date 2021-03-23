@@ -2,6 +2,7 @@
 
 Pomodori inspired app, created just as a python exercise.
 I use to compile and run in windows.
+Worked on Ubuntu/Gnome3 excluding Windows10Toast Lib.
 
 Config Low time and High time in config.ini file.
 
