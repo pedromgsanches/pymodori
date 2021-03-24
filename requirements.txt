@@ -2,7 +2,7 @@ pip install playsound
 pip install datetime
 pip install PyQt5
 pip install configparser
-
+pip install win10toast 
 
 ubuntu:
 apt install libxcb-xinerama
