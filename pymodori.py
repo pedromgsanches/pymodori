@@ -1,12 +1,8 @@
 ## NEXT:
+# reduzir linhas - 226 --> 100?
 # excepçoes sons e imagens
-# impedir duas instancias
 # show timer, botao restart, botao cancel
-
-# Muito mais tarde: 
-# # detecta movimentos do rato
-# # detecta se bloqueia o Pc
-# # caso muito ativo durante muito tempo - o icone muda e os sons tocam
+# # detecta se bloqueia o Pc e para o timer, reset ao timer quando desbloqueia
 
 import sys, os, random
 from playsound import playsound
@@ -15,22 +11,22 @@ from datetime import datetime, timedelta
 from PyQt5.QtCore import QRunnable, Qt, QThreadPool
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction, QLabel, QApplication, QMainWindow
-
-from win10toast import ToastNotifier
-toaster = ToastNotifier()
-
 from configparser import ConfigParser
+from win10toast import ToastNotifier
 
+toaster = ToastNotifier()
 cfg = ConfigParser()
+
 try:
     cfg.read('config.ini')
     time1_seconds = cfg.getint('pymodori','lotime') * 60
     time2_seconds = cfg.getint('pymodori','hitime') * 60
 except:
-    #cfg('pymodori','lotime') = 20
-    #cfg('pymodori','hitime') = 25
-    #with open('config.ini', 'w') as configfile:
-    #    cfg.write(configfile)
+    cfg.add_section('pymodori')
+    cfg['pymodori']['lotime'] = '20'
+    cfg['pymodori']['hitime'] = '25'
+    with open('config.ini', 'w') as configfile:
+        cfg.write(configfile)
     time1_seconds = 20*60
     time2_seconds = 25*60
 
@@ -58,15 +54,6 @@ with open(madtoast) as st:
     madlist = []
     for i in st:
         madlist.append(i)
-## convert lambda func
-def get_sad_toast():
-    toast_text=random.choice(sadlist)
-    return(toast_text)
-## convert lambda func
-def get_mad_toast():
-    toast_text=random.choice(madlist)
-    return(toast_text)
-
 
 # Classes
 class Timer(QRunnable):
@@ -91,24 +78,20 @@ class Timer(QRunnable):
                 print("Bye!")
                 x=False
                 AppExit()
-                
             if (init_time + timedelta(seconds=self.time1_seconds) < datetime.now()) and (ct1==0):
                 TrayDef.setIcon("sad")
                 playsound(sound1_file)
-                toaster.show_toast("Pymodori time is running...",get_sad_toast(),icon_path=pymtoast,duration=10,threaded=True)
+                toaster.show_toast("Pymodori time is running...",random.choice(sadlist),icon_path=pymtoast,duration=10,threaded=True)
                 ct1=1
                 sleep(2)
-                #print("LoTime")
             elif init_time + timedelta(seconds=self.time2_seconds) < datetime.now():
                 TrayDef.setIcon("mad")
                 playsound(sound2_file)
-                toaster.show_toast("Pymodori time has gone...",get_mad_toast(),icon_path=pymtoast,duration=10,threaded=True)
+                toaster.show_toast("Pymodori time has gone...",random.choice(madlist),icon_path=pymtoast,duration=10,threaded=True)
                 init_time = datetime.now()
                 ct1=0
                 sleep(2)
-                
                 x=False
-                #print("HiTime")
             else:   
                 tdelta = init_time + timedelta(seconds=self.time2_seconds) - datetime.now()
                 tf = open('control','w')
@@ -118,7 +101,6 @@ class Timer(QRunnable):
 
 class Tray(QRunnable):
     def __init__(self):
-        #START QTapp
         # Adding an icon
         self.tray = QSystemTrayIcon() 
         self.tray.setIcon(QIcon(pym)) 
@@ -141,7 +123,6 @@ class Tray(QRunnable):
         self.o_start.triggered.connect(TWorker)        
         self.o_settings.triggered.connect(SettingsWindow.showme)
         self.tray.setContextMenu(self.menu) 
-    
     #Change Tray Icon
     def setIcon(self,NewIcon):
         if NewIcon=="sad":
@@ -172,12 +153,10 @@ class DefWindow(QMainWindow):
 class AboWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("About Pymodori")    
-        
+        self.setWindowTitle("About Pymodori")     
         tf = open('control','r')
         tlab = QLabel("Pomodori inspired App, \nbut as a Python exercise.\n - \n"+tf.read())
         tf.close()
-
     def showme(self):
         tf = open('control','r')
         tlab = QLabel("Pomodori inspired App, \nbut as a Python exercise.\n - \n"+tf.read())
@@ -187,26 +166,22 @@ class AboWindow(QMainWindow):
         self.setCentralWidget(tlab)
         self.show()
                       
-# MultiThread --
-# worker1 -> trayIcon
-# worker2 -> timer()
-
+# MultiThread -- # worker1 -> trayIcon # worker2 -> timer()
 def TWorker():
     TimerDef = Timer(time1_seconds,time2_seconds)
     pool.start(TimerDef.runIT)
 
+if os.path.exists("control") is True:
+    sys.exit()
 tf = open('control','w')
 tf.write('00:00:00')
 tf.close()
-    
 app = QApplication([]) 
 app.setQuitOnLastWindowClosed(False) 
 SettingsWindow = DefWindow()
 AboutWindow = AboWindow()
 TrayDef = Tray()
 pool = QThreadPool.globalInstance()
-
-#app.exec_()
 
 def main():
     pool.start(app.exec_())
@@ -215,11 +190,4 @@ def main():
     sys.exit(app.exec_())
 
 if __name__ == "__main__":
-    #cf = open('control',"a+")
-    #cf.write("OK")
-    #cf.close()
     main()
-
-
-
-
