@@ -2,7 +2,8 @@
 
 Pomodori inspired app, created just as a python exercise.
 I use to compile and run in windows.
-Worked on Ubuntu/Gnome3 excluding Windows10Toast Lib.
+Worked on Ubuntu/Gnome3 and Windows.
+Windows10Toast Lib can be uncommented to add WindowsToast Notifications.
 
 Config Low time and High time in config.ini file.
 

@@ -12,9 +12,10 @@ from PyQt5.QtCore import QRunnable, Qt, QThreadPool
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QSystemTrayIcon, QMenu, QAction, QLabel, QApplication, QMainWindow
 from configparser import ConfigParser
-from win10toast import ToastNotifier
+=======
+## from win10toast import ToastNotifier
 
-toaster = ToastNotifier()
+## toaster = ToastNotifier()
 cfg = ConfigParser()
 
 try:
@@ -38,22 +39,22 @@ try:
     sad           = 'data/sad.png'
     mad           = 'data/mad.png'
     pym           = 'data/pym.png'
-    pymtoast      = 'data/pymtoast.png'
-    sadtoast      = 'data/sadtoast.txt'
-    madtoast      = 'data/madtoast.txt'
+##    pymtoast      = 'data/pymtoast.png'
+##    sadtoast      = 'data/sadtoast.txt'
+##    madtoast      = 'data/madtoast.txt'
 except:
     print("Where are my data files?")
     sys.exit()
 
 # Get Toast -- definir classe
-with open(sadtoast) as st:
-    sadlist = []
-    for i in st:
-        sadlist.append(i)
-with open(madtoast) as st:
-    madlist = []
-    for i in st:
-        madlist.append(i)
+##with open(sadtoast) as st:
+##    sadlist = []
+##    for i in st:
+##        sadlist.append(i)
+##with open(madtoast) as st:
+##    madlist = []
+##    for i in st:
+##       madlist.append(i)
 
 # Classes
 class Timer(QRunnable):
@@ -81,13 +82,15 @@ class Timer(QRunnable):
             if (init_time + timedelta(seconds=self.time1_seconds) < datetime.now()) and (ct1==0):
                 TrayDef.setIcon("sad")
                 playsound(sound1_file)
-                toaster.show_toast("Pymodori time is running...",random.choice(sadlist),icon_path=pymtoast,duration=10,threaded=True)
+
+##                toaster.show_toast("Pymodori time is running...",random.choice(sadlist),icon_path=pymtoast,duration=10,threaded=True)
                 ct1=1
                 sleep(2)
             elif init_time + timedelta(seconds=self.time2_seconds) < datetime.now():
                 TrayDef.setIcon("mad")
                 playsound(sound2_file)
-                toaster.show_toast("Pymodori time has gone...",random.choice(madlist),icon_path=pymtoast,duration=10,threaded=True)
+
+##                toaster.show_toast("Pymodori time has gone...",random.choice(madlist),icon_path=pymtoast,duration=10,threaded=True)
                 init_time = datetime.now()
                 ct1=0
                 sleep(2)
